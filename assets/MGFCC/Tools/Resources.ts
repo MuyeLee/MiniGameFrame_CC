@@ -6,8 +6,9 @@ export default class Resources{
      * 加载图片资源
      * @param path 资源位置
      * @param sprite 需要给赋值的Sprite
+     * @param cb 回调 返回SpriteFrame,不需要可以传null
      */
-    public static LoadSpriteFrame(path:string,sprite:cc.Sprite) {
+    public static LoadSpriteFrame(path:string,sprite:cc.Sprite, cb:Function) {
         if(this.sprite_frame_map.has(path)){
             if(sprite)sprite.spriteFrame = this.sprite_frame_map.get(path);
         }else{
@@ -16,6 +17,7 @@ export default class Resources{
                 if(!err){
                     if(sprite)sprite.spriteFrame = spriteFrame;
                     self.sprite_frame_map.set(path, spriteFrame);
+                    if(cb!=null)cb(spriteFrame);
                 }
             });
         }
@@ -40,8 +42,9 @@ export default class Resources{
      * @param x x轴坐标
      * @param y y轴坐标
      * @param z z轴坐标
+     * @param cb 回调 node,不需要可以传null
      */
-    public static LoadPrefab(path:string, node:cc.Node, parent:cc.Node, x:number, y:number, z:number){
+    public static LoadPrefab(path:string, node:cc.Node, parent:cc.Node, x:number, y:number, z:number,cb:Function){
         if(this.prefab_map.has(path)){
             node = cc.instantiate(this.prefab_map.get(path));
             node.setParent(parent);
@@ -54,6 +57,7 @@ export default class Resources{
                     node = cc.instantiate(prefab);
                     node.setParent(parent);
                     node.setPosition(x, y, z);
+                    if(cb!=null)cb(node);
                 }
             });
         }
