@@ -143,5 +143,6 @@ export default class PanelBase extends cc.Component {
         if (path == null) text = parent.getComponent(cc.Label);
         else text = parent.getChildByName(path).getComponent(cc.Label);
         if(content!=null)text.string = content;
+        return text;
     }
 }
