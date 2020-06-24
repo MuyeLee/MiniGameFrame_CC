@@ -89,4 +89,8 @@ export default class Dictionary<K, V>{
     public getKeys(){
         return this.keys.slice(0);
     }
+
+    public getCount():number{
+        return this.keys.length;
+    }
 }
