@@ -30,12 +30,10 @@ export default class TestAPanel extends PanelBase {
     }
 
     private GetServerTimeCb(data) {
-        console.log(data);
         this.label.string = '时间：' + TimeTools.TimestampToShortDate(data.data);
     }
 
     private GetUIDCb(data) {
-        console.log(data);
         this.label.string = 'uid：' + data.data;
     }
 

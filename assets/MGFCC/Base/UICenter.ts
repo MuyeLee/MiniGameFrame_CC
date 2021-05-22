@@ -1,21 +1,21 @@
 import PanelBase from "./PanelBase";
 import { UIAnimType } from "./UIAnimType";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 
 @ccclass
 export default class UICenter extends cc.Component {
-    public static instance:UICenter;
+    public static instance: UICenter;
 
-    private panel_map = new Map();
-    protected last_panel:string;
-    protected current_panel:string;
+    private panel_map = new Map<string, PanelBase>();
+    protected last_panel: string;
+    protected current_panel: string;
 
-    private width:number;
-    private height:number;
+    private width: number;
+    private height: number;
 
-    onLoad () {
+    onLoad() {
         this.width = cc.winSize.width;
         this.height = cc.winSize.height;
         UICenter.instance = this;
@@ -25,10 +25,10 @@ export default class UICenter extends cc.Component {
      * 注册页面
      * @param panel 页面
      */
-    public RegisterPanel(panel:PanelBase){
-        if(this.panel_map.has(panel.node.name)){
+    public RegisterPanel(panel: PanelBase) {
+        if (this.panel_map.has(panel.node.name)) {
             this.panel_map.set(panel.node.name, panel);
-        }else{
+        } else {
             if (this.current_panel == null) {
                 this.current_panel = panel.node.name;
                 panel.OpenClick();
@@ -41,8 +41,8 @@ export default class UICenter extends cc.Component {
      * 注销界面
      * @param name 界面名字
      */
-    public LogoutPanel(name:string){
-        if(this.panel_map.has(name)){
+    public LogoutPanel(name: string) {
+        if (this.panel_map.has(name)) {
             this.panel_map.delete(name);
         }
     }
@@ -53,8 +53,8 @@ export default class UICenter extends cc.Component {
      * @param method 方法id
      * @param params 参数
      */
-    public CallPanelMethod(name:string, method:number, params:any){
-        if(this.panel_map.has(name)){
+    public CallPanelMethod(name: string, method: number, params: any) {
+        if (this.panel_map.has(name)) {
             this.panel_map.get(name).CallPanelMethod(method, params);
         }
     }
@@ -64,22 +64,21 @@ export default class UICenter extends cc.Component {
      * @param panel_name 页面名字
      * @param anim 页面出现动画
      */
-    public OpenPanel(panel_name:string, anim:UIAnimType){
-        if(panel_name == this.current_panel || !this.panel_map.has(this.current_panel))return;
-        let temp_next:PanelBase = null;
-        let temp_current:PanelBase = this.panel_map.get(this.current_panel);
-        
+    public OpenPanel(panel_name: string, anim: UIAnimType) {
+        if (panel_name == this.current_panel || !this.panel_map.has(this.current_panel)) return;
+        let temp_next: PanelBase = null;
+        let temp_current: PanelBase = this.panel_map.get(this.current_panel);
+
         temp_current.CloseClick();
-        if (this.panel_map.has(panel_name)){
+        if (this.panel_map.has(panel_name)) {
             temp_next = this.panel_map.get(panel_name);
-        }else{
+        } else {
             let temp = this.node.getChildByName(panel_name);
-            if(temp == null){temp_current.OpenClick();return;}
+            if (temp == null) { temp_current.OpenClick(); return; }
             temp_next = temp.getComponent(PanelBase);
             temp_next.RegisterPanel();
         }
-        switch (anim)
-        {
+        switch (anim) {
             case UIAnimType.NONE:
                 this.NoneAnim(temp_current, temp_next);
                 break;
@@ -106,10 +105,9 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private NoneAnim(current:PanelBase, next: PanelBase)
-    {
+    private NoneAnim(current: PanelBase, next: PanelBase) {
         current.node.active = false;
-        next.node.setPosition(0,0);
+        next.node.setPosition(0, 0);
         next.node.active = true;
         this.last_panel = this.current_panel;
         this.current_panel = next.node.name;
@@ -121,8 +119,8 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private Superimposed(current:PanelBase, next: PanelBase){
-        next.node.setPosition(0,0);
+    private Superimposed(current: PanelBase, next: PanelBase) {
+        next.node.setPosition(0, 0);
         next.node.active = true;
         this.last_panel = this.current_panel;
         this.current_panel = next.node.name;
@@ -134,7 +132,7 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private LeftToRight(current:PanelBase, next: PanelBase){
+    private LeftToRight(current: PanelBase, next: PanelBase) {
         next.CloseClick();
         next.node.setPosition(-this.width, 0);
         next.node.active = true;
@@ -159,7 +157,7 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private RightToLeft(current:PanelBase, next: PanelBase){
+    private RightToLeft(current: PanelBase, next: PanelBase) {
         next.CloseClick();
         next.node.setPosition(this.width, 0);
         next.node.active = true;
@@ -184,10 +182,10 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private MinToMax(current:PanelBase, next: PanelBase){
+    private MinToMax(current: PanelBase, next: PanelBase) {
         next.CloseClick();
-        next.node.setPosition(0,0);
-        next.node.setScale(0,0);
+        next.node.setPosition(0, 0);
+        next.node.setScale(0, 0);
         next.node.active = true;
 
         current.node.runAction(
@@ -210,9 +208,9 @@ export default class UICenter extends cc.Component {
      * @param current 当前页面
      * @param next 下个页面
      */
-    private AlphaShow(current:PanelBase, next: PanelBase){
+    private AlphaShow(current: PanelBase, next: PanelBase) {
         next.CloseClick();
-        next.node.setPosition(0,0);
+        next.node.setPosition(0, 0);
         next.node.opacity = 0;
         next.node.active = true;
         current.node.runAction(
